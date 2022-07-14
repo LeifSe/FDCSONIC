@@ -1,0 +1,283 @@
+is_border_leaf: true
+lacp_pcs:
+  - 18
+  - 19
+  - 20
+  - 21
+  - 22
+  - 23
+  - 24
+  - 25
+mclag_member_pcs:
+  - lag: PortChannel18
+  - lag: PortChannel19
+  - lag: PortChannel20
+  - lag: PortChannel21
+  - lag: PortChannel22
+  - lag: PortChannel23
+  - lag: PortChannel24
+  - lag: PortChannel25
+sonic_bgp:
+  - bestpath:
+      as_path:
+        multipath_relax: true
+    bgp_as: '{{ bgp_asn }}'
+    router_id: '{{ bgp_router_id }}'
+  - bgp_as: '{{bgp_asn}}'
+    vrf_name: Vrf1
+  - bgp_as: '{{ bgp_asn }}'
+sonic_bgp_af:
+  - address_family:
+      afis:
+        - afi: ipv4
+          max_path:
+            ebgp: 2
+          redistribute:
+            - protocol: connected
+          safi: unicast
+        - advertise_all_vni: true
+          afi: l2vpn
+          safi: evpn
+    bgp_as: '{{bgp_asn}}'
+  - address_family:
+      afis:
+        - advertise_prefix:
+            - afi: ipv4
+              safi: unicast
+          afi: l2vpn
+          safi: evpn
+        - afi: ipv4
+          redistribute:
+            - protocol: connected
+          safi: unicast
+    bgp_as: '{{ bgp_asn }}'
+    vrf_name: Vrf1
+sonic_bgp_neighbors:
+  - bgp_as: '{{bgp_asn}}'
+    neighbors:
+      - neighbor: Eth1/54
+        peer_group: spine-leaf
+      - neighbor: Eth1/53
+        peer_group: spine-leaf
+    peer_group:
+      - '{{sonic_bgp_spineleaf_peergroup}}'
+sonic_bgp_neighbors_af:
+  - bgp_as: '{{bgp_asn}}'
+    neighbors:
+      - address_family: '{{sonic_bgp_fabriclink_neighbors_aflist}}'
+        neighbor: Eth1/54
+      - address_family: '{{sonic_bgp_fabriclink_neighbors_aflist}}'
+        neighbor: Eth1/53
+sonic_config:
+  lines: []
+sonic_interfaces:
+  - description: '"Uplink"'
+    enabled: true
+    name: Eth1/1
+  - description: '"Uplink"'
+    enabled: true
+    name: Eth1/2
+  - description: '"Node-09_eth1-PCIe-NIC1-25G-2"'
+    enabled: true
+    name: Eth1/13
+  - description: '"Node-10_eth1-PCIe-NIC1-25G-2"'
+    enabled: true
+    name: Eth1/14
+  - description: '"Node-11_eth1-PCIe-NIC1-25G-2"'
+    enabled: true
+    name: Eth1/15
+  - description: '"Node-12_eth1-PCIe-NIC1-25G-2"'
+    enabled: true
+    name: Eth1/16
+  - description: '"Node-13_eth1-PCIe-NIC1-25G-2"'
+    enabled: true
+    name: Eth1/17
+  - description: '"Node-14_eth1-PCIe-NIC1-25G-2"'
+    enabled: true
+    name: Eth1/18
+  - description: '"Node-15_eth1-PCIe-NIC1-25G-2"'
+    enabled: true
+    name: Eth1/19
+  - description: '"Node-16_eth1-PCIe-NIC1-25G-2"'
+    enabled: true
+    name: Eth1/20
+  - description: '"Uplink to NewFabric-SPINE-2 Eth1/2"'
+    enabled: true
+    name: Eth1/53
+  - description: '"Uplink to NewFabric-SPINE-1 Eth1/2"'
+    enabled: true
+    name: Eth1/54
+  - description: '"MCLAG to NewFabric-LEAF-1 Eth1/55"'
+    enabled: true
+    name: Eth1/55
+  - description: '"MCLAG to NewFabric-LEAF-1 Eth1/56"'
+    enabled: true
+    name: Eth1/56
+  - description: router-id
+    name: '{{ loopback_inf0 }}'
+  - description: vtep
+    name: '{{ loopback_inf1 }}'
+  - description: '"LAG to Compute_1_Node-09_bond0"'
+    mtu: 9216
+    name: PortChannel18
+  - description: '"LAG to Compute_1_Node-10_bond0"'
+    mtu: 9216
+    name: PortChannel19
+  - description: '"LAG to Compute_1_Node-11_bond0"'
+    mtu: 9216
+    name: PortChannel20
+  - description: '"LAG to Compute_1_Node-12_bond0"'
+    mtu: 9216
+    name: PortChannel21
+  - description: '"LAG to Compute_1_Node-13_bond0"'
+    mtu: 9216
+    name: PortChannel22
+  - description: '"LAG to Compute_1_Node-14_bond0"'
+    mtu: 9216
+    name: PortChannel23
+  - description: '"LAG to Compute_1_Node-15_bond0"'
+    mtu: 9216
+    name: PortChannel24
+  - description: '"LAG to Compute_1_Node-16_bond0"'
+    mtu: 9216
+    name: PortChannel25
+sonic_l2_interfaces:
+  - name: Eth1/1
+    trunk:
+      allowed_vlans:
+        - vlan: 200
+  - name: Eth1/2
+    trunk:
+      allowed_vlans:
+        - vlan: 200
+  - name: PortChannel 18
+    trunk:
+      allowed_vlans:
+        - vlan: 101
+  - name: PortChannel 19
+    trunk:
+      allowed_vlans:
+        - vlan: 101
+  - name: PortChannel 20
+    trunk:
+      allowed_vlans:
+        - vlan: 101
+  - name: PortChannel 21
+    trunk:
+      allowed_vlans:
+        - vlan: 101
+  - name: PortChannel 22
+    trunk:
+      allowed_vlans:
+        - vlan: 101
+  - name: PortChannel 23
+    trunk:
+      allowed_vlans:
+        - vlan: 101
+  - name: PortChannel 24
+    trunk:
+      allowed_vlans:
+        - vlan: 101
+  - name: PortChannel 25
+    trunk:
+      allowed_vlans:
+        - vlan: 101
+  - name: PortChannel100
+    trunk:
+      allowed_vlans:
+        - vlan: 101
+        - vlan: 60
+sonic_l3_interfaces:
+  - ipv6:
+      enabled: true
+    name: Eth1/53
+  - ipv6:
+      enabled: true
+    name: Eth1/54
+  - ipv4:
+      addresses:
+        - address: '{{ loopback0_ip }}'
+    name: '{{ loopback_inf0 }}'
+  - ipv4:
+      addresses:
+        - address: '{{ loopback1_ip }}'
+    name: '{{ loopback_inf1 }}'
+sonic_lag_interfaces:
+  - members:
+      interfaces:
+        - member: Eth1/13
+    mode: lacp
+    name: PortChannel18
+  - members:
+      interfaces:
+        - member: Eth1/14
+    mode: lacp
+    name: PortChannel19
+  - members:
+      interfaces:
+        - member: Eth1/15
+    mode: lacp
+    name: PortChannel20
+  - members:
+      interfaces:
+        - member: Eth1/16
+    mode: lacp
+    name: PortChannel21
+  - members:
+      interfaces:
+        - member: Eth1/17
+    mode: lacp
+    name: PortChannel22
+  - members:
+      interfaces:
+        - member: Eth1/18
+    mode: lacp
+    name: PortChannel23
+  - members:
+      interfaces:
+        - member: Eth1/19
+    mode: lacp
+    name: PortChannel24
+  - members:
+      interfaces:
+        - member: Eth1/20
+    mode: lacp
+    name: PortChannel25
+  - members:
+      interfaces:
+        - member: Eth1/55
+        - member: Eth1/56
+    name: PortChannel100
+sonic_system:
+  anycast_address:
+    ipv4: true
+    mac_address: '{{ anycast_mac_address }}'
+  hostname: NewFabric-LEAF-2
+  interface_naming: standard
+sonic_vlans:
+  - vlan_id: 200
+  - vlan_id: 101
+  - vlan_id: 60
+sonic_vrf_interfaces:
+  - members:
+      interfaces:
+        - name: Vlan101
+        - name: Vlan60
+        - name: Vlan200
+    name: Vrf1
+sonic_vxlans:
+  - evpn_nvo: nvo1
+    name: vtep1
+    source_ip: '{{ loopback1_ip.split(''/'')[0] }}'
+    vlan_map:
+      - vlan: 101
+        vni: 10101
+      - vlan: 60
+        vni: 600
+    vrf_map:
+      - vni: 600
+        vrf: Vrf1
+vlans:
+  - 101
+vrfs:
+  - Vrf1
